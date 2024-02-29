@@ -1,16 +1,11 @@
 package ui
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import ui.components.listColumn
 import utilities.SortAlgorithm
 import utilities.insertionSort
 import utilities.selectionSort
@@ -93,42 +88,8 @@ fun SortScreen(){
             }
         }
         //Second column to display the unsorted list.
-        Column(modifier = Modifier.weight(0.3f)){
-            if (itemsList.isNotEmpty()) {
-                // Display the generated (unsorted) list in a column
-                Text("Unsorted list:")
-                Box(
-                    modifier = Modifier.fillMaxWidth().border(1.dp, Color.Gray, shape = RoundedCornerShape(4.dp))
-                ) {
-                    LazyColumn(
-                        Modifier.fillMaxSize().padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        itemsIndexed(itemsList) { index, item ->
-                            Text("$index: ${item}")
-                        }
-                    }
-                }
-            }
-        }
+        listColumn(itemsList, "Unsorted List", modifier = Modifier.weight(0.3f))
         //Third column to display sorted list.
-        Column(modifier = Modifier.weight(0.3f)){
-            if (itemsListSorted.isNotEmpty()) {
-                // Display the generated (unsorted) list in a column
-                Text("Sorted list:")
-                Box(
-                    modifier = Modifier.fillMaxWidth().border(1.dp, Color.Gray, shape = RoundedCornerShape(4.dp))
-                ) {
-                    LazyColumn(
-                        Modifier.fillMaxSize().padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        itemsIndexed(itemsListSorted) { index, item ->
-                            Text("$index: ${item}")
-                        }
-                    }
-                }
-            }
-        }
+        listColumn(itemsListSorted, "Sorted List", modifier = Modifier.weight(0.3f))
     }
 }
