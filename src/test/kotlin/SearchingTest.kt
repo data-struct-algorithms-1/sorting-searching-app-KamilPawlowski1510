@@ -68,6 +68,18 @@ class SearchingTest {
             // Assert
             assertEquals(-1, result)
         }
+
+        @Test
+        fun `linearSearch should return the target index for an array of strings with multiple values that contains the target`() {
+            // Arrange
+            val array = arrayOf<String>("a", "b", "c", "d", "e", "f")
+
+            // Act
+            val result = linearSearch(array, "d")
+
+            // Assert
+            assertEquals(3, result)
+        }
     }
 
     @Nested
@@ -134,6 +146,19 @@ class SearchingTest {
 
             // Assert
             assertEquals(-1, result)
+        }
+
+        @Test
+        fun `binarySearch should return the target index for a sorted array of strings with multiple values that contains the target`() {
+            // Arrange
+            val array = arrayOf<String>("a", "b", "c", "d", "e", "f")
+            array.sort()
+
+            // Act
+            val result = binarySearch(array, "d")
+
+            // Assert
+            assertEquals(3, result)
         }
     }
 }
