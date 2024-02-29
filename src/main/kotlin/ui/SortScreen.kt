@@ -51,7 +51,13 @@ fun SortScreen(){
                 ) {
                     RadioButton(
                         selected = selectedSortAlgorithm == algorithm,
-                        onClick = { selectedSortAlgorithm = algorithm }
+                        onClick = {
+                            if(selectedSortAlgorithm != algorithm){
+                                selectedSortAlgorithm = algorithm
+                                itemsList.clear()
+                                itemsListSorted.clear()
+                            }
+                        }
                     )
                     Text(algorithm.name)
                 }
