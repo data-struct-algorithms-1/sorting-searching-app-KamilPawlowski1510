@@ -1,31 +1,52 @@
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import com.example.compose.AppTheme
+import ui.SearchScreen
+import ui.SortScreen
+import ui.components.TabButton
+import utilities.MenuItem
+
 
 @Composable
-@Preview
-fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
+fun App(currentScreen: MutableState<MenuItem>) {
 
-    MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            Text(text)
+    Column {
+        TabRow(selectedTabIndex = currentScreen.value.ordinal) {
+
+            TabButton(text = "Search",
+                selected = currentScreen.value == MenuItem.Search,
+                onClick = { currentScreen.value = MenuItem.Search })
+
+            TabButton(text = "Sort",
+                selected = currentScreen.value == MenuItem.Sort,
+                onClick = { currentScreen.value = MenuItem.Sort })
+        }
+
+        Box {
+            when (currentScreen.value) {
+                MenuItem.Search -> SearchScreen()
+                MenuItem.Sort -> SortScreen()
+            }
         }
     }
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
+
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "Searching and Sorting App"
+    ) {
+        AppTheme() {
+            val currentScreen = remember { mutableStateOf(MenuItem.Search) }
+            App(currentScreen)
+        }
     }
 }
