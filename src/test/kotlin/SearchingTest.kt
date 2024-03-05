@@ -46,6 +46,30 @@ class SearchingTest {
         }
 
         @Test
+        fun `linearSearch should return the target index for an array with multiple values that contains the target as the first value`() {
+            // Arrange
+            val array = arrayOf<Int>(1, 2, 3, 4, 5, 6)
+
+            // Act
+            val result = linearSearch(array, 1)
+
+            // Assert
+            assertEquals(0, result)
+        }
+
+        @Test
+        fun `linearSearch should return the target index for an array with multiple values that contains the target as the last value`() {
+            // Arrange
+            val array = arrayOf<Int>(1, 2, 3, 4, 5, 6)
+
+            // Act
+            val result = linearSearch(array, 6)
+
+            // Assert
+            assertEquals(5, result)
+        }
+
+        @Test
         fun `linearSearch should return the first target index for an array with multiple instances of the target`() {
             // Arrange
             val array = arrayOf<Int>(1, 2, 3, 4, 5, 6, 4)
@@ -120,6 +144,30 @@ class SearchingTest {
 
             // Assert
             assertEquals(3, result)
+        }
+
+        @Test
+        fun `binarySearch should return the target index for a sorted array with multiple values that contains the target as the first value`() {
+            // Arrange
+            val array = arrayOf<Int>(1, 2, 3, 4, 5, 6)
+
+            // Act
+            val result = binarySearch(array, 1)
+
+            // Assert
+            assertEquals(0, result)
+        }
+
+        @Test
+        fun `binarySearch should return the target index for a sorted array with multiple values that contains the target as the last value`() {
+            // Arrange
+            val array = arrayOf<Int>(1, 2, 3, 4, 5, 6)
+
+            // Act
+            val result = binarySearch(array, 6)
+
+            // Assert
+            assertEquals(5, result)
         }
 
         @Test
