@@ -6,9 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ui.components.listColumn
-import utilities.SortAlgorithm
-import utilities.insertionSort
-import utilities.selectionSort
+import utilities.*
 import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,8 +72,8 @@ fun SortScreen(){
                     when (selectedSortAlgorithm) {
                         SortAlgorithm.Selection -> selectionSort(typedArray)
                         SortAlgorithm.Insertion -> insertionSort(typedArray)
-                        SortAlgorithm.Bubble -> TODO()
-                        SortAlgorithm.Merge -> TODO()
+                        SortAlgorithm.Bubble -> bubbleSort(typedArray)
+                        SortAlgorithm.Merge -> mergeSort(typedArray)
                     }
 
                     // Update itemsState with the sorted array
