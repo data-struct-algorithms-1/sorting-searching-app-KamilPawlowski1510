@@ -19,10 +19,10 @@ fun TabButton(text: String, selected: Boolean, onClick: () -> Unit){
 
     Tab(selected = selected,
         onClick = onClick,
-        modifier = Modifier
-            .background(backgroundColour)
-            .padding(16.dp)
+        modifier = Modifier.background(backgroundColour)
     ){
-        Text(text = text, color = foregroundColour)
+        Text(text = text,
+             color = foregroundColour,
+             modifier = Modifier.padding(16.dp))
     }
 }
