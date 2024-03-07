@@ -31,7 +31,7 @@ fun SearchScreen(){
     val searchText = remember { mutableStateOf("") }
 
     //For storing the first index if the item is found in the list
-    val foundItemIndex = remember { mutableStateOf(-1) }
+    val foundItemIndex = remember { mutableStateOf(-2) }
 
     //For supporting scrolling and scrolling to an item, if found
     val listState = rememberLazyListState()
@@ -53,6 +53,25 @@ fun SearchScreen(){
                 onValueChange = { numberItems.value = it },
                 label = { Text("Number of Items") }
             )
+
+            //For generating a random list of items of type Int based on number of items entered
+            Button(
+                onClick = {
+                    foundItemIndex.value = -2
+                    //Generate a random list of items of type Int based on number of items entered
+                    val numItems = numberItems.value.toIntOrNull()
+                    if (numItems != null) {
+                        itemsList.clear()
+                        repeat(numItems) {
+                            itemsList.add(Random.nextInt(0, 100))
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                enabled = numberItems.value.isNotBlank()
+            ) {
+                Text("Generate Numbers")
+            }
 
             // Radio buttons to select the search algorithm
             SearchAlgorithm.values().forEach { algorithm ->
@@ -76,15 +95,6 @@ fun SearchScreen(){
 
             Button(
                 onClick = {
-                    //Generate a random list of items of type Int based on number of items entered
-                    val numItems = numberItems.value.toIntOrNull()
-                    if (numItems != null) {
-                        itemsList.clear()
-                        repeat(numItems) {
-                            itemsList.add(Random.nextInt(0, 100))
-                        }
-                    }
-
                     val typedArray = itemsList.map { it as Int }.toTypedArray()
 
                     foundItemIndex.value = when (selectedSearchAlgorithm) {
@@ -104,7 +114,7 @@ fun SearchScreen(){
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                enabled = numberItems.value.isNotBlank()
+                enabled = searchText.value.isNotBlank()
             ) {
                 Text("Search")
             }
@@ -112,9 +122,9 @@ fun SearchScreen(){
             Text(
                 text =
                 when {
-                    foundItemIndex.value != -1 -> "$selectedSearchAlgorithm: Found index: ${foundItemIndex.value}"
-                    itemsList.isEmpty() -> ""
-                    else -> "$selectedSearchAlgorithm: NOT FOUND"
+                    foundItemIndex.value > -1 -> "Found index: ${foundItemIndex.value}"
+                    foundItemIndex.value == -1 -> "NOT FOUND"
+                    else -> ""
                 }
             )
         }
