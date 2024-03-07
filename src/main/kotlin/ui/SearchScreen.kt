@@ -96,15 +96,19 @@ fun SearchScreen(){
             Button(
                 onClick = {
                     val typedArray = itemsList.map { it as Int }.toTypedArray()
+                    val search = searchText.value.toIntOrNull()
 
-                    foundItemIndex.value = when (selectedSearchAlgorithm) {
-                        SearchAlgorithm.Linear -> linearSearch(typedArray, searchText.value.toInt())
-                        SearchAlgorithm.Binary -> {
-                            typedArray.sort()  //Binary only works on sorted list
-                            itemsList.sortBy { it as Int} //sort the itemList for display
-                            binarySearch(typedArray, searchText.value.toInt())
+                    if (search != null) {
+                        foundItemIndex.value = when (selectedSearchAlgorithm) {
+                            SearchAlgorithm.Linear -> linearSearch(typedArray, search)
+                            SearchAlgorithm.Binary -> {
+                                typedArray.sort()  //Binary only works on sorted list
+                                itemsList.sortBy { it as Int} //sort the itemList for display
+                                binarySearch(typedArray, search)
+                            }
                         }
                     }
+                    else foundItemIndex.value = -1
 
                     //Scroll to the item, if found
                     if (foundItemIndex.value != -1) {
@@ -114,7 +118,7 @@ fun SearchScreen(){
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                enabled = searchText.value.isNotBlank()
+                enabled = searchText.value.isNotBlank() && itemsList.isNotEmpty()
             ) {
                 Text("Search")
             }
