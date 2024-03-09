@@ -1,7 +1,7 @@
 package utilities
 
 enum class MenuItem {
-    Search, Sort
+    Search, Sort, AnimatedSort
 }
 
 enum class SearchAlgorithm {
