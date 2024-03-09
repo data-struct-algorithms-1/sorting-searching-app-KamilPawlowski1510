@@ -9,6 +9,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.example.compose.AppTheme
 import ui.AnimatedSortScreen
+import ui.OldSortScreen
 import ui.SearchScreen
 import ui.SortScreen
 import ui.components.TabButton
@@ -29,6 +30,10 @@ fun App(currentScreen: MutableState<MenuItem>) {
                 selected = currentScreen.value == MenuItem.Sort,
                 onClick = { currentScreen.value = MenuItem.Sort })
 
+            TabButton(text = "Old Sort",
+                selected = currentScreen.value == MenuItem.OldSort,
+                onClick = { currentScreen.value = MenuItem.OldSort })
+
             TabButton(text = "Animated Sort",
                 selected = currentScreen.value == MenuItem.AnimatedSort,
                 onClick = { currentScreen.value = MenuItem.AnimatedSort })
@@ -38,6 +43,7 @@ fun App(currentScreen: MutableState<MenuItem>) {
             when (currentScreen.value) {
                 MenuItem.Search -> SearchScreen()
                 MenuItem.Sort -> SortScreen()
+                MenuItem.OldSort -> OldSortScreen()
                 MenuItem.AnimatedSort -> AnimatedSortScreen()
             }
         }
