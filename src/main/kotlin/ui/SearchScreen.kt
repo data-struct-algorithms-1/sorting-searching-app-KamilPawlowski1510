@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import ui.components.SubmitTextField
 import utilities.SearchAlgorithm
 import utilities.binarySearch
 import utilities.linearSearch
@@ -47,37 +48,25 @@ fun SearchScreen(){
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            //For entering the number of items to generate
-            OutlinedTextField(
-                value = numberItems.value,
-                onValueChange = { numberItems.value = it },
-                label = { Text("Number of Items") }
-            )
-
-            //For generating a random list of items of type Int based on number of items entered
-            Button(
-                onClick = {
-                    foundItemIndex.value = -2
-                    //Generate a random list of items of type Int based on number of items entered
-                    val numItems = numberItems.value.toIntOrNull()
-                    if (numItems != null) {
-                        itemsList.clear()
-                        repeat(numItems) {
-                            itemsList.add(Random.nextInt(0, 100))
-                        }
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                enabled = numberItems.value.isNotBlank()
-            ) {
-                Text("Generate Numbers")
+            //For generating a random list of items of type Int based on number of items entered or 100 by default
+            SubmitTextField("Generate Numbers (100 Default)", numberItems, true){
+                foundItemIndex.value = -2
+                //Generate a random list of items of type Int based on number of items entered
+                var numItems = numberItems.value.toIntOrNull()
+                if (numItems == null) {
+                    numItems = 100
+                }
+                itemsList.clear()
+                repeat(numItems) {
+                    itemsList.add(Random.nextInt(0, 100))
+                }
             }
 
             // Radio buttons to select the search algorithm
-            SearchAlgorithm.values().forEach { algorithm ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SearchAlgorithm.values().forEach { algorithm ->
                     RadioButton(
                         selected = selectedSearchAlgorithm == algorithm,
                         onClick = { selectedSearchAlgorithm = algorithm }
@@ -86,41 +75,30 @@ fun SearchScreen(){
                 }
             }
 
-            //The item to search for in the above data
-            OutlinedTextField(
-                value = searchText.value,
-                onValueChange = { searchText.value = it },
-                label = { Text("Search") }
-            )
+            // Search for a specified item or 5 by default
+            SubmitTextField("Search (5 Default)", searchText, itemsList.isNotEmpty()){
+                val typedArray = itemsList.map { it as Int }.toTypedArray()
+                var search = searchText.value.toIntOrNull()
 
-            Button(
-                onClick = {
-                    val typedArray = itemsList.map { it as Int }.toTypedArray()
-                    val search = searchText.value.toIntOrNull()
+                if (search == null) {
+                    search = 5
+                }
 
-                    if (search != null) {
-                        foundItemIndex.value = when (selectedSearchAlgorithm) {
-                            SearchAlgorithm.Linear -> linearSearch(typedArray, search)
-                            SearchAlgorithm.Binary -> {
-                                typedArray.sort()  //Binary only works on sorted list
-                                itemsList.sortBy { it as Int} //sort the itemList for display
-                                binarySearch(typedArray, search)
-                            }
-                        }
+                foundItemIndex.value = when (selectedSearchAlgorithm) {
+                    SearchAlgorithm.Linear -> linearSearch(typedArray, search)
+                    SearchAlgorithm.Binary -> {
+                        typedArray.sort()  //Binary only works on sorted list
+                        itemsList.sortBy { it as Int} //sort the itemList for display
+                        binarySearch(typedArray, search)
                     }
-                    else foundItemIndex.value = -1
+                }
 
-                    //Scroll to the item, if found
-                    if (foundItemIndex.value != -1) {
-                        coroutineScope.launch {
-                            listState.scrollToItem(foundItemIndex.value)
-                        }
+                //Scroll to the item, if found
+                if (foundItemIndex.value != -1) {
+                    coroutineScope.launch {
+                        listState.scrollToItem(foundItemIndex.value)
                     }
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                enabled = searchText.value.isNotBlank() && itemsList.isNotEmpty()
-            ) {
-                Text("Search")
+                }
             }
 
             Text(
